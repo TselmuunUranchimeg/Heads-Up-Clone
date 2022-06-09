@@ -1,0 +1,101 @@
+.form-background {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.form-h1 {
+    color: white;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 25rem;
+    margin-top: 1.25rem;
+}
+
+.form-p {
+    opacity: 0.6;
+}
+
+.form-input {
+    padding: 17px;
+    margin-bottom: 1.25rem;
+    border-radius: 2px;
+    border: none;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    font-size: 1em;
+}
+
+.form-button, .form-a {
+    background-color: #f97316;
+    color: white;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.form-button {
+    font-weight: bolder;
+    border: 0;
+    cursor: pointer;
+    padding: 10px 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+}
+
+.form-a {
+    text-decoration: none;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1.25rem;
+    padding: 10px 0;
+}
+
+.loading {
+    width: 100vw;
+    height: 100vh;
+    background-color: #29cce5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media only screen and (min-width: 1500px) {
+    .form {
+        width: 40rem;
+    }
+
+    .form-h1 {
+        font-size: 3.5em;
+    }
+
+    .form-input {
+        font-size: 1.75em;
+        padding: 22.5px 28px;
+        margin-bottom: 1.75rem;
+    }
+
+    .form-button, .form-a {
+        font-size: 2.5em;
+    }
+
+    .form-p {
+        font-size: 1.5em;
+    }
+
+    .form-a {
+        margin-bottom: 2rem;
+    }
+}
+@media only screen and (max-width: 470px) {
+    .form {
+        width: 17.5rem;
+    }
+}
+@media only screen and (max-width: 320px) {
+    .form {
+        width: 15rem;
+    }
+}

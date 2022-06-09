@@ -1,0 +1,226 @@
+.gameroom {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.gameroom-content {
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    margin-top: 2rem;
+    width: 75%;
+    color: white;
+    background-color: black;
+    padding-bottom: 1.5rem;
+    max-height: 80vh;
+}
+
+.gameroom-player-section {
+    display: flex;
+    width: 100%;
+}
+
+.gameroom-word {
+    width: 50%;
+}
+.gameroom-word button {
+    background-color: #01D5D6;
+    color: white;
+    font-weight: bold;
+    font-size: 1.25rem;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+}
+.gameroom-word button:disabled {
+    background-color: #cccccc;
+    cursor: default;
+}
+
+.player {
+    min-height: 100px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-bottom: 1.5px solid white;
+}
+
+.player-array {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    border-top: 1.5px solid white;
+    border-bottom: 1.5px solid white;
+    overflow: auto;
+}
+
+.border-bottom-none {
+    border-bottom: none;
+}
+
+.border-right {
+    border-right: 1.5px solid white;
+}
+
+.border-left {
+    border-left: 1.5px solid white;
+}
+
+.gameEnd-background {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+}
+
+.gameEnd-content {
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+    color: white;
+    width: 75%;
+    max-height: 70%;
+    border: 5px white;
+    border: 8px solid white;
+    border-top: none;
+    margin-top: 5%;
+    text-align: center;
+    box-sizing: border-box;
+    padding-bottom: 1rem;
+    position: relative;
+}
+
+.gameEnd-content-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    background-color: white;
+}
+.gameEnd-content-header p {
+    margin: 0;
+    font-size: 2.25rem;
+    font-weight: bolder;
+    padding: 0.5rem 0;
+}
+
+.gameEnd-content-information {
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 0 7.5%;
+    align-items: center;
+    border-bottom: 1px solid white;
+}
+.gameEnd-content-information p {
+    margin: 0;
+    font-size: 1.25em;
+    padding: 1rem 0;
+}
+
+.gameEnd-content-score {
+    overflow: auto;
+    height: 100%;
+}
+
+.gameEnd-content-teams {
+    display: flex;
+    width: 100%;
+    min-height: calc(100% - 48px);
+}
+
+.gameEnd-content-scoreTable {
+    width: 50%;
+    overflow: auto;
+}
+
+.gameEnd-table {
+    overflow: auto;
+}
+
+.gameEnd-table-row {
+    width: 100%;
+    display: flex;
+    box-sizing: border-box;
+    padding: 0.75rem 0.5rem;
+}
+.gameEnd-table-row p {
+    margin: 0;
+    width: calc(100% / 3);
+}
+
+.gameEnd-button {
+    display: flex;
+    justify-content: center;
+}
+.gameEnd-button a {
+    background-color: #f97316;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.5rem;
+    padding: 10px;
+}
+
+@media only screen and (max-width: 1400px) {
+    .gameEnd-content {
+        width: 85%;
+    }
+}
+@media only screen and (max-width: 950px) {
+    .gameEnd-content-teams {
+        flex-direction: column;
+    }
+    .gameEnd-content-scoreTable {
+        width: 100%;
+        height: 50%;
+    }
+    .gameEnd-content-information p {
+        font-size: 1em;
+    }
+}
+@media only screen and (max-width: 750px) {
+    .gameroom-player-section {
+        flex-direction: column;
+    }
+    .gameroom-word {
+        width: 100%;
+        margin: 1.5rem 0;
+    }
+    .player-array {
+        width: 100%;
+        border-right: 0;
+        border-left: 0;
+        flex-direction: row;
+    }
+    .player {
+        border-right: 1.5px solid white;
+        border-left: 1.5px solid white;
+        width: 120px;
+        padding: 0 1rem;
+    }
+}
+@media only screen and (max-width: 425px) {
+    .gameroom-content h1 {
+        font-size: 1em;
+    }
+    .gameEnd-content-information {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .gameEnd-content-information p {
+        font-size: 0.75em;
+    }
+    .gameEnd-content-teams {
+        margin-bottom: 1rem;
+    }
+}
+@media only screen and (max-width: 300px) {
+    .gameEnd-button a {
+        font-size: 0.75rem;
+    }
+}

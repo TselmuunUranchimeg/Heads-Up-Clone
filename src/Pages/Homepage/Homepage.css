@@ -1,0 +1,48 @@
+.homepage {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    padding: 4.25rem 0 0 0;
+}
+.homepage h1 {
+    font-size: 4em;
+    margin: 0;
+    margin-bottom: 10px;
+}
+.homepage a {
+    text-decoration: none;
+    color: white;
+    background-color: #f97316;
+    padding: 10px 15px;
+    margin: 0.6rem 0;
+    width: 13rem;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.75em;
+}
+
+@media only screen and (min-width: 1500px) {
+    .homepage h1 {
+        font-size: 5em;
+    }
+    .homepage a {
+        font-size: 2.5em;
+        width: 20rem;
+    }
+}
+@media only screen and (max-width: 660px) {
+    .homepage h1 {
+        font-size: 2.5em;
+    }
+}
+@media only screen and (max-width: 420px) {
+    .homepage h1 {
+        font-size: 1.75em;
+    }
+    .homepage a {
+        font-size: 1em;
+        width: 7rem;
+    }
+}

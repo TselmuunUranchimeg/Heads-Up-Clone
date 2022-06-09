@@ -1,0 +1,124 @@
+.waitingRoom-background {
+    width: 100vw;
+    color: white;
+    margin-top: 60px;
+    display: flex;
+    justify-content: center;
+}
+
+.waitingRoom {
+    width: 55%;
+    background-color: black;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    min-width: 480px;
+}
+
+.waitingRoom-content {
+    width: 100%;
+    display: flex;
+}
+
+.waitingRoom-details {
+    width: 35%;
+    border-right: 1px solid;
+    margin-bottom: 1rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    position: relative;
+    min-width: 280px;
+}
+.waitingRoom-details h2 {
+    margin-top: 0;
+}
+.waitingRoom-button, .waitingRoom-responsive-button {
+    width: 100%;
+    background-color: red;
+    color: white;
+    border: 0;
+    cursor: pointer;
+    font-size: 1.1em;
+    padding: 7.5px 0;
+}
+
+.waitingRoom-users {
+    width: 65%;
+    box-sizing: border-box;
+    padding: 0 1.5rem;
+    text-align: left;
+    position: relative;
+}
+.waitingRoom-users h2 {
+    margin: 0;
+}
+
+.waitingRoom-responsive-button {
+    display: none;
+}
+
+.waitingRoom-dividingLine {
+    display: none;
+}
+
+.label {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 0 15px;
+}
+.label p {
+    margin: 1rem 0;
+}
+
+@media only screen and (min-width: 1400px) {
+    .waitingRoom h1 {
+        font-size: 2.25em;
+    }
+
+    .waitingRoom-details {
+        margin-bottom: 1.8rem;
+        padding: 0 1.8rem;
+    }
+}
+@media only screen and (max-width: 900px) {
+    .waitingRoom-responsive-button {
+        display: inline-block;
+        position: absolute;
+        bottom: 1rem;
+        width: calc(100% - 3em);
+        padding: 10px 0;
+    }
+    .waitingRoom-button {
+        display: none;
+    }
+    .waitingRoom-content {
+        flex-direction: column;
+        height: 60vh;
+        align-items: center;
+    }
+    .waitingRoom-details {
+        display: flex;
+        overflow: auto;
+        width: 100%;
+        flex-direction: column;
+    }
+    .waitingRoom-users {
+        height: 100%;
+        width: 100%;
+        padding: 0 2rem;
+    }
+    .waitingRoom-dividingLine {
+        width: calc(100% - 4rem);
+        height: 1px;
+        background-color: white;
+        display: block;
+    }
+}
+@media only screen and (max-width: 600px) {
+    .waitingRoom {
+        min-width: 90%;
+    }
+}

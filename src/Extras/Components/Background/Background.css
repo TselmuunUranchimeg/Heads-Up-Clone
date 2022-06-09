@@ -1,0 +1,63 @@
+.background {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    background-color: #29cce5;
+    overflow: hidden;
+}
+
+@keyframes moving-cloud {
+    0% { margin-left: 100vw; };
+    100% { margin-left: -200px; };
+}
+
+.single-cloud, .cloudBack, .cloudFront {
+    color: white;
+    margin-left: -200px;
+    animation-name: moving-cloud;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.cloudFront, .cloudBack, .single-cloud {
+    opacity: 0.25;
+    position: absolute;
+}
+
+.cloudFront .back-cloud {
+    font-size: 10rem;
+}
+.cloudFront .front-cloud {
+    font-size: 5rem;
+    position: absolute;
+    bottom: 0;
+    left: -25px;
+}
+
+.cloudBack .back-cloud {
+    font-size: 5rem;
+    position: absolute;
+    right: -25px;
+    bottom: 0;
+}
+.cloudBack .front-cloud {
+    font-size: 10rem;
+}
+
+.single-cloud {
+    font-size: 11rem !important;
+}
+
+@media (min-width: 1500px) {
+    .single-cloud {
+        font-size: 11.5rem !important;
+    }
+
+    .cloudFront .back-cloud, .cloudBack .front-cloud {
+        font-size: 13rem;
+    }
+
+    .cloudBack .back-cloud, .cloudFront .front-cloud {
+        font-size: 8rem;
+    }
+}
