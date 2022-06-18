@@ -28,7 +28,7 @@ import initSocket from "./socket/socket";
     await initRedis();
     await connectToDb();
     await initSocket(server);
-    server.listen(8000, () => {
+    server.listen(process.env.PORT! || 8000, () => {
         console.log("Server has started!!!");
     });
 })();

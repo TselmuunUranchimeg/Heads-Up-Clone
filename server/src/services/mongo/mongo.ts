@@ -2,10 +2,12 @@ import { connect, Model, Document } from "mongoose";
 
 const connectToDb = async () => {
     try {
-        await connect("mongodb://localhost:27017/Heads_Up");
+        await connect(process.env.DATABASE!, {
+            dbName: "Heads_Up"
+        });
         console.log("Connected to MongoDB database!!!");
     } catch (e) {
-        console.log(e);
+        throw e;
     }
 };
 
@@ -24,7 +26,7 @@ function findDocument<T>(
     });
 }
 
-function createDocument<T>(model: Model<T>, item: T): Promise<Document & T> {
+function createDocument<T>(model: Model<T>, item: T): Promise<Document<any> & T> {
     return new Promise(async (resolve, reject) => {
         try {
             resolve(await model.create(item));
