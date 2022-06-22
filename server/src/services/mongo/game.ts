@@ -14,8 +14,7 @@ export interface GameInterface {
     words: string[];
 }
 
-const GameSchema = new Schema({
-    expireAt: { type: Date, default: Date.now, index: { expireAfterSeconds: 1200 }},
+const GameSchema = new Schema<GameInterface>({
     rounds: { type: Number },
     wordType: { type: String },
     team1: [{ username: String, gotCorrect: Number, gotWrong: Number, _id: false }],
@@ -23,6 +22,7 @@ const GameSchema = new Schema({
     channelName: { type: String },
     words: [String]
 });
+GameSchema.index({ createdAt: 1 }, { expireAfterSeconds: 1200 });
 
-const GameModel = model("game", GameSchema);
+const GameModel = model<GameInterface>("game", GameSchema);
 export { GameModel };

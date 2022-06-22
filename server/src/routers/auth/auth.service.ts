@@ -75,26 +75,32 @@ const register = async (res: Response, body: RegisterType) => {
 };
 
 const login = async (res: Response, body: LoginType) => {
-    let user = await findDocument<UserInterface>(UserModel, {
-        email: body.email
-    });
-    if (user) {
-        if (await verify(user.password, body.password, { type: argon2id })) {
-            await updateUserTokens(res, { email: body.email });
-            const {
-                __v,
-                _id,
-                id,
-                password,
-                accessTokenId,
-                refreshTokenId,
-                ...rest
-            } = user.toJSON();
-            res.status(200).json(rest);
-            return;
+    try {
+        let user = await findDocument<UserInterface>(UserModel, {
+            email: body.email
+        });
+        if (user) {
+            if (await verify(user.password, body.password, { type: argon2id })) {
+                await updateUserTokens(res, { email: body.email });
+                const {
+                    __v,
+                    _id,
+                    id,
+                    password,
+                    accessTokenId,
+                    refreshTokenId,
+                    ...rest
+                } = user.toJSON();
+                res.status(200).json(rest);
+                return;
+            }
         }
+        res.status(401).send("Email or password is wrong!!!");
     }
-    res.status(401).send("Email or password is wrong!!!");
+    catch (e) {
+        console.log(e);
+        res.status(500).send("Something went wrong with the server, please try again later!!!");
+    }
 };
 
 const verifyReq = async (refreshToken: string, res: Response) => {

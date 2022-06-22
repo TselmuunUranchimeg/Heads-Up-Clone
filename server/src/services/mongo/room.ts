@@ -16,18 +16,18 @@ interface RoomInterface {
     team2: PlayerInterface[];
 }
 
-const RoomSchema = new Schema({
+const RoomSchema = new Schema<RoomInterface>({
     rounds: { type: Number, required: true },
     channelName: { type: String, required: true },
     wordType: { type: String, required: true },
     playerCount: { type: Number, required: true },
     words: [{ type: String, required: true }],
     password: { type: String, required: true },
-    expireAt: { type: Date, default: Date.now, index: { expireAfterSeconds: 1200 } },
     players: [{ type: String, required: true }],
     team1: [{ username: String, uid: String }],
     team2: [{ username: String, uid: String }],
 });
+RoomSchema.index({ createdAt: 1 }, { expireAfterSeconds: 1200 });
 
-const RoomModel = model("room", RoomSchema);
+const RoomModel = model<RoomInterface>("room", RoomSchema);
 export { RoomModel, RoomInterface, PlayerInterface };

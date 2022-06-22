@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import "dotenv/config";
 import rootRouter from "./routers/rootRouter";
 import { initRedis } from "./services/redis/redis";
-import connectToDb from "./services/mongo/mongo";
+import { connectToDb } from "./services/mongo/mongo";
 import initSocket from "./socket/socket";
 
 (async () => {

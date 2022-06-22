@@ -32,10 +32,10 @@ const JoinRoom = () => {
                 return;
             }
             const { channelName, ...rest } = res;
+            dispatch(updateState({ ...store, channelName }));
             navigate("/room/wait", {
                 state: rest
             });
-            dispatch(updateState({ ...store, channelName }));
             socket.current?.emit("newUserReady", { 
                 channelName, 
                 username: store.username

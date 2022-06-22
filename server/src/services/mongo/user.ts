@@ -8,7 +8,7 @@ export interface UserInterface {
     refreshTokenId: string;
 }
 
-const UserSchema = new Schema({
+const UserSchema = new Schema<UserInterface>({
     username: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, requried: true },
@@ -16,5 +16,5 @@ const UserSchema = new Schema({
     refreshTokenId: { type: String, required: true },
 });
 
-const UserModel = model("user", UserSchema);
+const UserModel = model<UserInterface>("user", UserSchema);
 export default UserModel;

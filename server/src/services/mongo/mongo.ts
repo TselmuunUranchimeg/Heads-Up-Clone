@@ -1,4 +1,4 @@
-import { connect, Model, Document } from "mongoose";
+import { connect, Model, Document, HydratedDocument } from "mongoose";
 
 const connectToDb = async () => {
     try {
@@ -26,10 +26,14 @@ function findDocument<T>(
     });
 }
 
-function createDocument<T>(model: Model<T>, item: T): Promise<Document<any> & T> {
+function createDocument<T>(
+    model: Model<T>,
+    item: T
+): Promise<HydratedDocument<any> & T> {
     return new Promise(async (resolve, reject) => {
         try {
-            resolve(await model.create(item));
+            let newDocument = await model.create(item);
+            resolve(newDocument);
         } catch (e) {
             reject(e);
             throw e;
@@ -54,5 +58,9 @@ function updateDocument<T>(
     });
 }
 
-export default connectToDb;
-export { findDocument, createDocument, updateDocument };
+export { 
+    findDocument, 
+    createDocument, 
+    updateDocument,
+    connectToDb
+};
