@@ -4,7 +4,10 @@ import { TokenType, createToken, verifyToken } from "../jwt/jwt";
 let client: RedisClientType;
 
 const initRedis = async () => {
-    client = createClient();
+    client = createClient({
+        url: `redis://${process.env.REDIS_ENDPOINT!}`,
+        password: process.env.REDIS_PASSWORD!
+    });
     client.on("error", (e) => {
         console.log(e);
     });

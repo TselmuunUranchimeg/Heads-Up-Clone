@@ -13,7 +13,7 @@ import initSocket from "./socket/socket";
     const server = createServer(app);
 
     app.use(cors({
-        origin: "http://localhost:3000",
+        origin: process.env.AUDIENCE!,
         allowedHeaders: ["Content-Type", "Authorization"],
         methods: ["GET", "POST"],
         credentials: true,
