@@ -23,7 +23,7 @@ const JoinRoom = () => {
     useEffect(() => {
         if (!socket.current) socket.current = get();
 
-        socket.current.on("joinRoomResponse", (res: undefined | any) => {
+        socket.current.off().on("joinRoomResponse", (res: undefined | any) => {
             if (typeof res === "undefined") {
                 alert(
                     "Something went wrong with the server, please try again later!!!"

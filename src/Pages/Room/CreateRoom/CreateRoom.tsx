@@ -31,7 +31,7 @@ const CreateRoom = () => {
     useEffect(() => {
         if (!socket.current) socket.current = get();
 
-        socket.current?.on(
+        socket.current?.off().on(
             "createRoomResponse",
             async (res: undefined | any) => {
                 if (typeof res === "undefined") {
