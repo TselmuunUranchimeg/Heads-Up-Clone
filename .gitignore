@@ -19,6 +19,11 @@
 .env.test.local
 .env.production.local
 
+# firebase related files
+.firebase
+.firebaserc
+firebase.json
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
