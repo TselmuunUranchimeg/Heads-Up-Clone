@@ -1,7 +1,8 @@
-import { connect, Model, Document, HydratedDocument } from "mongoose";
+import { connect, Model, Document, HydratedDocument, set } from "mongoose";
 
 const connectToDb = async () => {
     try {
+        set("strictQuery", false);
         await connect(process.env.DATABASE!, {
             dbName: "Heads_Up"
         });

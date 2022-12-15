@@ -37,7 +37,7 @@ const Login = () => {
                     ...store,
                     username: res.data.username,
                     email: res.data.email,
-                    accessToken: res.headers["authorization"],
+                    accessToken: res.headers["authorization"] as string,
                 }));
                 set();
                 alert("Successfully logged in!!!");
@@ -47,7 +47,7 @@ const Login = () => {
                             dispatch(updateState({
                                 username: res.data.username,
                                 email: res.data.email,
-                                accessToken: res.headers["authorization"],
+                                accessToken: res.headers["authorization"] as string,
                                 channelName: ""
                             }));
                         }

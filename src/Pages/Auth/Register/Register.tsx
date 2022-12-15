@@ -40,7 +40,7 @@ const Register = () => {
                     ...store,
                     username: res.data.username,
                     email: res.data.email,
-                    accessToken: res.headers["authorization"],
+                    accessToken: res.headers["authorization"] as string,
                 }));
                 set();
                 alert("Successfully registered!!!");
@@ -50,7 +50,7 @@ const Register = () => {
                             dispatch(updateState({
                                 username: res.data.username,
                                 email: res.data.email,
-                                accessToken: res.headers["authorization"],
+                                accessToken: res.headers["authorization"] as string,
                                 channelName: ""
                             }));
                         }

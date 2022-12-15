@@ -23,7 +23,7 @@ function App() {
                     dispatch(updateState({
                         username: res.data.username,
                         email: res.data.email,
-                        accessToken: res.headers["authorization"],
+                        accessToken: res.headers["authorization"] as string,
                         channelName: ""
                     }));
                     set();
@@ -33,7 +33,7 @@ function App() {
                                 dispatch(updateState({
                                     username: res.data.username,
                                     email: res.data.email,
-                                    accessToken: res.headers["authorization"],
+                                    accessToken: res.headers["authorization"] as string,
                                     channelName: ""
                                 }));
                             }
