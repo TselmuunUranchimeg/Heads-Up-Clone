@@ -10,6 +10,8 @@ import {
 import { createDocument, findDocument } from "../../services/mongo/mongo";
 import { WordInterface } from "../../services/mongo/word";
 import { RoomInterface, RoomModel } from "../../services/mongo/room";
+import { GameInterface, GameModel } from "../../services/mongo/game";
+import { gameLogic } from "../inGame/inGame.service";
 
 enum TeamSide {
     Team1 = "team1",
@@ -104,7 +106,9 @@ const joinRoom = async (socket: Socket, body: JoinRoomInterface) => {
             rounds: room.rounds,
             playerCount: room.playerCount
         });
+        return;
     }
+    socket.emit("notAvailable", "Room is either not created or expired.");
 };
 
 const newUserReady = async (
@@ -125,33 +129,53 @@ const newUserReady = async (
             }
         }
         room![result].push({ username, uid: "" });
-        if (room!.players.length === room!.playerCount) {
-            setTimeout(() => {
-                const { team1, team2 } = room!;
-                let playersAndTokens: Array<PlayersAndTokensInterface> = [];
-                room!.players.forEach((player) => {
-                    const token = RtcTokenBuilder.buildTokenWithUid(
-                        process.env.APP_ID!,
-                        process.env.APP_CERTIFICATE!,
-                        channelName,
-                        0,
-                        RtcRole.PUBLISHER,
-                        Math.floor(Date.now() / 1000) + 3600
-                    );
-                    playersAndTokens.push({ token, player });
-                });
-                io.in(channelName).emit("gameReady", {
-                    team1,
-                    team2,
-                    appId: process.env.APP_ID!,
-                    playersAndTokens
-                });
-            }, 2000);
-        }
     }
     await room!.save();
     socket.emit("newUserReadyRes", room!.players);
     socket.broadcast.to(channelName).emit("newUserJoined", username);
+    if (room!.players.length === room!.playerCount) {
+        const { team1, team2, rounds, wordType, words } = room!;
+        let playersAndTokens: Array<PlayersAndTokensInterface> = [];
+        room!.players.forEach((player) => {
+            const token = RtcTokenBuilder.buildTokenWithUid(
+                process.env.APP_ID!,
+                process.env.APP_CERTIFICATE!,
+                channelName,
+                0,
+                RtcRole.PUBLISHER,
+                Math.floor(Date.now() / 1000) + 3600
+            );
+            playersAndTokens.push({ token, player });
+        });
+        let game = await createDocument<GameInterface>(GameModel, {
+            rounds: rounds,
+            wordType: wordType,
+            team1: team1.map(val => {
+                return {
+                    username: val.username,
+                    gotCorrect: 0,
+                    gotWrong: 0
+                }
+            }),
+            team2: team2.map(val => {
+                return {
+                    username: val.username,
+                    gotCorrect: 0,
+                    gotWrong: 0
+                }
+            }),
+            channelName, words
+        });
+        const intervalId = await gameLogic(io, channelName, game, 0, 1, 0);
+        io.in(channelName).emit("gameReady", {
+            team1,
+            team2,
+            appId: process.env.APP_ID!,
+            playersAndTokens,
+            intervalId,
+            word: words[0]
+        });
+    }
 };
 
 const leaveRoom = async (socket: Socket, body: LeaveRoomInterface) => {

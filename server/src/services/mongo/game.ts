@@ -12,6 +12,7 @@ export interface GameInterface {
     team2: GamePlayerInterface[];
     channelName: string;
     words: string[];
+    createdAt?: Date;
 }
 
 const GameSchema = new Schema<GameInterface>({
@@ -20,7 +21,8 @@ const GameSchema = new Schema<GameInterface>({
     team1: [{ username: String, gotCorrect: Number, gotWrong: Number, _id: false }],
     team2: [{ username: String, gotCorrect: Number, gotWrong: Number, _id: false }],
     channelName: { type: String },
-    words: [String]
+    words: [String],
+    createdAt: { type: Date, expires: 1200, default: Date.now }
 });
 GameSchema.index({ createdAt: 1 }, { expireAfterSeconds: 1200 });
 

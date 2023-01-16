@@ -14,6 +14,7 @@ interface RoomInterface {
     players: string[];
     team1: PlayerInterface[];
     team2: PlayerInterface[];
+    createdAt?: Date;
 }
 
 const RoomSchema = new Schema<RoomInterface>({
@@ -26,6 +27,7 @@ const RoomSchema = new Schema<RoomInterface>({
     players: [{ type: String, required: true }],
     team1: [{ username: String, uid: String }],
     team2: [{ username: String, uid: String }],
+    createdAt: { type: Date, default: Date.now, expires: 1200 }
 });
 RoomSchema.index({ createdAt: 1 }, { expireAfterSeconds: 1200 });
 

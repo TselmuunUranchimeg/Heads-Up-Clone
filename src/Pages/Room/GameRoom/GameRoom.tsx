@@ -11,18 +11,13 @@ interface PlayerInterface {
     username: string;
     uid: string;
 }
-interface PlayerComponentInterface extends PlayerInterface {
-    className: string;
-}
 interface StateInterface {
     appId: string;
     token: string;
     team1: PlayerInterface[];
     team2: PlayerInterface[];
-}
-interface PlayerArrayInterface {
-    players: Array<PlayerInterface>;
-    className: string;
+    intervalId: number;
+    word: string;
 }
 interface NewWordInterface {
     word: string;
@@ -53,40 +48,34 @@ interface ScoreSectionInterface {
     team: Array<GamePlayerInterface> | undefined;
     side: string;
 }
+interface PlayerArrayInterface {
+    team: PlayerInterface[];
+    borderSide: string;
+}
+interface PlayerTabInterface {
+    user: PlayerInterface;
+}
 
-const Player = ({ username, uid, className }: PlayerComponentInterface) => {
-    const [name, setName] = useState("");
-
-    useEffect(() => {
-        if (uid === "") {
-            setName("Loading...");
-        } else {
-            setName(username);
-        }
-    }, [uid, username]);
-
+const PlayerTab = ({ user }: PlayerTabInterface) => {
     return (
-        <div className={`player ${className}`}>
-            <p>{name}</p>
+        <div className = "player" id = { user.uid }>
+            <div>
+                <p>{ user.username }</p>
+            </div>
         </div>
-    );
-};
-const PlayerArray = ({ players, className }: PlayerArrayInterface) => {
+    )
+}
+const PlayerArray = ({ team, borderSide }: PlayerArrayInterface) => {
     return (
-        <div className={`player-array ${className}`}>
-            {players.map((value, index) => (
-                <Player
-                    username={value.username}
-                    uid={value.uid}
-                    key={index}
-                    className={
-                        index === players.length - 1 ? "border-bottom-none" : ""
-                    }
-                />
-            ))}
+        <div className = {`player-array ${ borderSide }`}>
+            {team.map((val, ind) => {
+                return (
+                    <PlayerTab user = { val } key = { ind } />
+                )
+            })}
         </div>
-    );
-};
+    )
+}
 const ScoreSection = ({ team, side }: ScoreSectionInterface) => {
     const [wins, setWins] = useState(0);
     const [losses, setLosses] = useState(0);
@@ -146,11 +135,11 @@ const GameRoom = () => {
         team1: state.team1,
         team2: state.team2
     });
-    const [word, setWord] = useState("Loading...");
-    const [disabled, setDisabled] = useState(false);
+    const [word, setWord] = useState(state.word);
+    const [disabled, setDisabled] = useState(state.team1[0].username === store.username);
     const [timer, setTimer] = useState(30);
-    const [answeringPlayer, setAnsweringPlayer] = useState("");
-    const [intervalId, setIntervalId] = useState(0);
+    const [answeringPlayer, setAnsweringPlayer] = useState(state.team1[0].username);
+    const [intervalId, setIntervalId] = useState(state.intervalId);
     const [isGameOver, setGameOver] = useState<null | GameEndInterface>(null);
     const client = useRef<IAgoraRTCClient>();
 
@@ -195,17 +184,23 @@ const GameRoom = () => {
                                 store.username
                             );
                         });
+                        const video = await AgoraRTC.createCameraVideoTrack();
+                        video.play(uid.toString());
                         socket.current?.emit("exchangeUID", {
                             uid: uid.toString(),
                             username: store.username,
                             channelName: store.channelName
                         });
-                        let audioTrack =
-                            await AgoraRTC.createMicrophoneAudioTrack();
-                        await client.current?.publish([audioTrack]);
+                        let track = 
+                            await AgoraRTC.createMicrophoneAndCameraTracks();
+                        await client.current?.publish(track);
                         client.current?.remoteUsers.forEach(async (user) => {
-                            await client.current?.subscribe(user, "audio");
+                            const
+                                audio = client.current!.subscribe(user, "audio"),
+                                video = client.current!.subscribe(user, "video");
+                            await Promise.all([audio, video]);
                             user.audioTrack?.play();
+                            user.videoTrack?.play(user.uid.toString());
                         });
                         console.clear();
                     });
@@ -224,12 +219,20 @@ const GameRoom = () => {
         }
 
         client.current?.on("user-published", async (user) => {
-            await client.current?.subscribe(user, "audio");
+            const
+                audio = client.current!.subscribe(user, "audio"),
+                video = client.current!.subscribe(user, "video");
+            await Promise.all([audio, video]);
             user.audioTrack?.play();
+            user.videoTrack?.play(user.uid.toString());
         });
         client.current?.on("user-joined", async (user) => {
-            await client.current?.subscribe(user, "audio");
+            const
+                audio = client.current!.subscribe(user, "audio"),
+                video = client.current!.subscribe(user, "video");
+            await Promise.all([audio, video]);
             user.audioTrack?.play();
+            user.videoTrack?.play(user.uid.toString());
         });
         client.current?.on("user-left", async (remoteUser) => {
             setTeams((prev) => {
@@ -242,6 +245,7 @@ const GameRoom = () => {
                 return { ...prev };
             });
             await client.current?.unsubscribe(remoteUser);
+
         });
 
         socket.current?.on("usernameUID", (body: PlayerInterface) => {
@@ -318,9 +322,10 @@ const GameRoom = () => {
             <div className="gameroom-content">
                 <h1>Game room section</h1>
                 <div className="gameroom-player-section">
-                    <PlayerArray
-                        players={teams.team1}
-                        className="border-right"
+                    {/* Player array */}
+                    <PlayerArray 
+                        team = { teams.team1 }
+                        borderSide = "border-right"
                     />
                     <div className="gameroom-word">
                         <h3>
@@ -335,9 +340,10 @@ const GameRoom = () => {
                             Next round
                         </button>
                     </div>
-                    <PlayerArray
-                        players={teams.team2}
-                        className="border-left"
+                    {/* Player array */}
+                    <PlayerArray 
+                        team = { teams.team2 }
+                        borderSide = "border-left"
                     />
                 </div>
             </div>

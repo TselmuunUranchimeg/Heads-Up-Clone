@@ -43,9 +43,13 @@ const JoinRoom = () => {
         });
     }, [navigate, socket, store.username, dispatch, store]);
 
+    socket.current?.on("notAvailable", (res: string) => {
+        alert(res);
+    });
+
     const submitForm = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        socket.current?.emit("joinRoom", { ...values, username: store.username });
+        socket.current?.emit("joinRoom", { ...values });
     };
 
     return (
