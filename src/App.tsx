@@ -64,7 +64,7 @@ function App() {
                     </div>
                 )
                 : (
-                    <Router>
+                    <Router basename = "/">
                         <Background />
                         <Routes>
                             <Route path = "room/*" element = {<Room />} />
