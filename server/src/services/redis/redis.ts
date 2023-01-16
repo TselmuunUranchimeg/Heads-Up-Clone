@@ -15,46 +15,41 @@ const initRedis = async () => {
     console.log("Created client for Redis!!!");
 };
 
-const saveToken = async (tokenType: TokenType, tokenId: string) => {
+const saveToken = async (tokenType: TokenType, tokenId: string, email: string) => {
     let token = await createToken({ id: tokenId }, tokenType);
     await client.setEx(
         tokenId,
         tokenType === TokenType.AccessToken ? 900 : 604800,
-        token
+        email
     );
     return token;
 };
 
 const tokenIsInRedis = async (token: string) => {
-    let uuid = await verifyToken(token);
-    if (uuid) {
-        let tokenFromRedis = await client.GET(uuid);
-        if (tokenFromRedis === token) {
-            return uuid;
+    try {
+        let id = await verifyToken(token);
+        if (id) {
+            let email = await client.GET(id);
+            if (email) {
+                return { email, id };
+            }
         }
+        return null;
     }
-    return null;
+    catch (e) {
+        return null;
+    }
 };
 
 const deleteToken = async (tokenId: string) => {
-    await client.DEL(tokenId);
-};
-
-const saveCount = async (channelName: string) => {
-    let value = await client.GET(channelName);
-    if (!value) {
-        await client.setEx(channelName, 20*60, "1");
-        return 1;
+    if (await client.GET(tokenId)) {
+        await client.DEL(tokenId);
     }
-    value = (parseInt(value) + 1).toString();
-    await client.setEx(channelName, 20*60, value);
-    return parseInt(value);
 };
 
 export {
     initRedis,
     saveToken,
     tokenIsInRedis,
-    deleteToken,
-    saveCount
+    deleteToken
 };

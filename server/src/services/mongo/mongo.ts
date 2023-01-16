@@ -15,7 +15,7 @@ const connectToDb = async () => {
 function findDocument<T>(
     model: Model<T>,
     data: any
-): Promise<(T & Document) | null> {
+): Promise<(HydratedDocument<T, {}, {}> & Document) | null> {
     return new Promise(async (resolve, reject) => {
         try {
             let document = await model.findOne(data).exec();
@@ -30,7 +30,7 @@ function findDocument<T>(
 function createDocument<T>(
     model: Model<T>,
     item: T
-): Promise<HydratedDocument<any> & T> {
+): Promise<HydratedDocument<T, {}, {}>> {
     return new Promise(async (resolve, reject) => {
         try {
             let newDocument = await model.create(item);

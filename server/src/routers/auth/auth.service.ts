@@ -7,40 +7,17 @@ import UserModel, { UserInterface } from "../../services/mongo/user";
 import { saveToken, tokenIsInRedis, deleteToken } from "../../services/redis/redis";
 import { TokenType } from "../../services/jwt/jwt";
 
-const saveBothTokens = async (
-    res: Response,
-    accessTokenId: string,
-    refreshTokenId: string
-) => {
-    let refreshToken = await saveToken(TokenType.RefreshToken, refreshTokenId);
-    let accessToken = await saveToken(TokenType.AccessToken, accessTokenId);
-    res.cookie("token", refreshToken, {
-        maxAge: 604800000,
+const saveBothTokens = async (res: Response, accessTokenId: string, refreshTokenId: string, email: string) => {
+    const access = await saveToken(TokenType.AccessToken, accessTokenId, email);
+    const refresh = await saveToken(TokenType.RefreshToken, refreshTokenId, email);
+    res.setHeader("Authorization", access);
+    res.cookie("token", refresh, {
         httpOnly: true,
+        sameSite: "lax",
         secure: true,
-        sameSite: "none",
-        path: "/"
+        maxAge: 604800000
     });
-    res.header("authorization", accessToken);
-};
-
-const updateUserTokens = async (res: Response, dataToFind: any) => {
-    let newAccessTokenId = v4();
-    let newRefreshTokenId = v4();
-    let saveBothTokensPromise = saveBothTokens(
-        res,
-        newAccessTokenId,
-        newRefreshTokenId
-    );
-    let user = await findDocument<UserInterface>(UserModel, dataToFind);
-    let deleteAccessPromise = deleteToken(user!.accessTokenId);
-    let deleteRefreshPromise = deleteToken(user!.refreshTokenId);
-    await Promise.all([deleteAccessPromise, deleteRefreshPromise]);
-    user!.accessTokenId = newAccessTokenId;
-    user!.refreshTokenId = newRefreshTokenId;
-    await Promise.all([saveBothTokensPromise, user!.save()]);
-    return user;
-};
+}
 
 const register = async (res: Response, body: RegisterType) => {
     //Check for email, and username
@@ -63,14 +40,9 @@ const register = async (res: Response, body: RegisterType) => {
     body.password = await hash(body.password, { type: argon2id });
     let newAccessTokenId = v4();
     let newRefreshTokenId = v4();
-    let document = await createDocument<UserInterface>(UserModel, {
-        accessTokenId: newAccessTokenId,
-        refreshTokenId: newRefreshTokenId,
-        ...body
-    });
-    await saveBothTokens(res, newAccessTokenId, newRefreshTokenId);
-    const { _id, __v, password, id, accessTokenId, refreshTokenId, ...rest } =
-        document.toJSON();
+    let document = await createDocument<UserInterface>(UserModel, { ...body });
+    await saveBothTokens(res, newAccessTokenId, newRefreshTokenId, body.email);
+    const { password, ...rest } = document.toJSON();
     res.status(200).json(rest);
 };
 
@@ -81,16 +53,8 @@ const login = async (res: Response, body: LoginType) => {
         });
         if (user) {
             if (await verify(user.password, body.password, { type: argon2id })) {
-                await updateUserTokens(res, { email: body.email });
-                const {
-                    __v,
-                    _id,
-                    id,
-                    password,
-                    accessTokenId,
-                    refreshTokenId,
-                    ...rest
-                } = user.toJSON();
+                await saveBothTokens(res, v4(), v4(), body.email);
+                const { password, ...rest } = user.toJSON();
                 res.status(200).json(rest);
                 return;
             }
@@ -105,22 +69,17 @@ const login = async (res: Response, body: LoginType) => {
 
 const verifyReq = async (refreshToken: string, res: Response) => {
     try {
-        let tokenId = await tokenIsInRedis(refreshToken);
-        if (tokenId) {
-            let user = await updateUserTokens(res, { refreshTokenId: tokenId });
-            const {
-                __v,
-                _id,
-                password,
-                id,
-                accessTokenId,
-                refreshTokenId,
-                ...rest
-            } = user!.toJSON();
+        const result = await tokenIsInRedis(refreshToken);
+        if (result) {
+            const { email, id } = result;
+            await deleteToken(id);
+            const user = await findDocument<UserInterface>(UserModel, { email });
+            const { password, ...rest } = user!.toJSON();
+            await saveBothTokens(res, v4(), v4(), email);
             res.status(200).json(rest);
             return;
         }
-        res.status(401).send("Not logged in!!!");
+        res.status(401).end("You are not logged in!");
     }
     catch (e) {
         console.log(e);
