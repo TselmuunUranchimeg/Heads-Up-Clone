@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { useState, ChangeEvent, FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -72,6 +73,9 @@ const Register = () => {
 
     return (
         <div className="absolute form-background">
+            <Helmet>
+                <title>Register - Heads Up Clone</title>
+            </Helmet>
             <form className="form" onSubmit = {e => submitForm(e)}>
                 <h1 className="form-h1">Register</h1>
                 <input

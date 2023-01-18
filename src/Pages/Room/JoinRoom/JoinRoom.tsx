@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, FormEvent } from "react";
+import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Socket } from "socket.io-client";
@@ -54,6 +55,9 @@ const JoinRoom = () => {
 
     return (
         <div className="absolute form-background">
+            <Helmet>
+                <title>Join a room - Heads Up Clone</title>
+            </Helmet>
             <form className="form" onSubmit={(e) => submitForm(e)}>
                 <h1 className="form-h1">Join room</h1>
                 <input

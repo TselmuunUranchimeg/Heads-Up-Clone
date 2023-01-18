@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { InitialState } from "../../Extras/store";
@@ -12,11 +13,16 @@ const Auth = () => {
     }
 
     return (
-        <Routes>
+        <>
+            <Helmet>
+                <meta name="description" content = "Sign in to play to the game" />
+            </Helmet>
+            <Routes>
             <Route path = "register" element = {<Register />} />
             <Route path = "login" element = {<Login />} />
             <Route path = "*" element = {<Navigate to = "/" />} />
         </Routes>
+        </>
     )
 }
 

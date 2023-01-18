@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Helmet } from "react-helmet";
 import { useSelector } from "react-redux";
 import { useLocation,  Link } from "react-router-dom";
 import AgoraRTC, { IAgoraRTCClient } from "agora-rtc-sdk-ng";
@@ -295,6 +296,9 @@ const GameRoom = () => {
 
     return (
         <div className="absolute gameroom">
+            <Helmet>
+                <title>In a game - Heads Up Clone</title>
+            </Helmet>
             <div
                 className="gameEnd-background"
                 style={{ display: isGameOver ? "flex" : "none" }}

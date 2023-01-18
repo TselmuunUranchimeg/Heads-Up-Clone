@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, FormEvent } from "react";
+import { Helmet } from "react-helmet";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
@@ -82,6 +83,9 @@ const CreateRoom = () => {
 
     return (
         <div className="absolute form-background">
+            <Helmet>
+                <title>Create a room - Heads Up Clone</title>
+            </Helmet>
             <form className="form" onSubmit={async (e) => await submitForm(e)}>
                 <h1 className="form-h1">Create room</h1>
                 <div className="createRoom-div">

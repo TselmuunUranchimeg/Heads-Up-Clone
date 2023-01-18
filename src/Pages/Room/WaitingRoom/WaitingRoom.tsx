@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { Helmet } from "react-helmet";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./WaitingRoom.css";
@@ -102,6 +103,9 @@ const WaitingRoom = () => {
 
     return (
         <div className="absolute waitingRoom-background">
+            <Helmet>
+                <title>Waiting for others to join - Heads Up Clone</title>
+            </Helmet>
             <div className="waitingRoom">
                 <h1>Waiting room</h1>
                 <div className="waitingRoom-content">
