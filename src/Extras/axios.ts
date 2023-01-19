@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosIns = axios.create({
-    baseURL: "http://localhost:8000",
+    baseURL: "https://heads-up-clone-server.onrender.com",
     withCredentials: true,
 });
 
