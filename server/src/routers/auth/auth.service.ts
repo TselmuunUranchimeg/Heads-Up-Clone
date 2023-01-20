@@ -13,7 +13,7 @@ const saveBothTokens = async (res: Response, accessTokenId: string, refreshToken
     res.setHeader("Authorization", access);
     res.cookie("token", refresh, {
         httpOnly: true,
-        sameSite: "lax",
+        sameSite: "none",
         secure: true,
         maxAge: 604800000
     });
