@@ -15,7 +15,8 @@ const saveBothTokens = async (res: Response, accessTokenId: string, refreshToken
         httpOnly: true,
         sameSite: "lax",
         secure: true,
-        maxAge: 604800000
+        maxAge: 604800000,
+        domain: process.env.DOMAIN!
     });
 }
 
