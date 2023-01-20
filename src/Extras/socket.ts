@@ -3,7 +3,7 @@ import { io, Socket } from "socket.io-client";
 let socketIns: Socket;
 
 const set = () => {
-    socketIns = io("https://heads-up-clone-server.onrender.com");
+    socketIns = io("http://localhost:8000");
 }
 
 const get = () => {
