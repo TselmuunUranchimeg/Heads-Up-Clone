@@ -68,3 +68,4 @@ cd server; npm run dev
 [Redis]: <https://redis.com>
 [MongoDB]: <https://mongodb.com>
 [Agora.io]: <https://agora.io>
+[TypeScript]: <https://typescriptlang.org>
